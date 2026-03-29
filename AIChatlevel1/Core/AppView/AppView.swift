@@ -8,30 +8,27 @@
 import SwiftUI
 
 struct AppView: View {
-    @State private var showTapBar: Bool = true
-    
+
+//    @AppStorage("showTapBarView") var showTapBar: Bool = false
+    @State var appState: AppState = AppState()
+
     var body: some View {
         AppViewBuilder(
-            showTapBar: showTapBar,
+            showTapBar: appState.showTapBar,
             tabbarView: {
-                ZStack {
-                    Color.blue.ignoresSafeArea()
-                    Text("Tab Bar")
-                }
+                TabBarView()
             },
             onboardingView: {
-                ZStack {
-                    Color.red.ignoresSafeArea()
-                    Text("Onboarding")
-                }
+                WelcomeView()
             }
         )
-        .onTapGesture {
-            showTapBar.toggle()
-        }
+        .environment(appState)
     }
 }
 
-#Preview {
-    AppView()
+#Preview("AppView - tabbar") {
+    AppView(appState: AppState(showTapBar: true))
+}
+#Preview("AppView - Onboarding") {
+    AppView(appState: AppState(showTapBar: false))
 }

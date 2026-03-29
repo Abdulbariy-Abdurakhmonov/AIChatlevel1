@@ -1,3 +1,12 @@
+//
+//  AppState.swift
+//  AIChatlevel1
+//
+//  Created by Abdulboriy on 28/03/26.
+//
+
+import SwiftUI
+
 @Observable
 class AppState {
     private(set) var showTapBar: Bool {
