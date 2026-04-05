@@ -59,8 +59,6 @@ struct ChatRowCellView: View {
         .padding(.horizontal, 8)
         .background(Color(uiColor: .systemBackground))
 
-
-
     }
 }
 
@@ -80,7 +78,5 @@ struct ChatRowCellView: View {
             ChatRowCellView(subheadline: nil, hasNewChat: false)
                 .removeListRowFormatting()
         }
-
-
     }
 }
