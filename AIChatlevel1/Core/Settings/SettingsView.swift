@@ -6,23 +6,15 @@
 //
 
 import SwiftUI
-
-fileprivate extension View {
-
-    func rowFormatting() -> some View {
-        self
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.vertical, 16)
-            .padding(.horizontal, 16)
-            .background(Color(uiColor: .systemBackground))
-    }
-}
+import SwiftfulUtilities
 
 struct SettingsView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(AppState.self) private var appState
     @State private var isPremium: Bool = false
+    @State private var isAnonymousUser: Bool = false
+    @State private var showCreateAccountView: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -32,6 +24,10 @@ struct SettingsView: View {
                 applicationSection
             }
             .navigationTitle("Settings")
+            .sheet(isPresented: $showCreateAccountView) {
+                CreateAccountView()
+                    .presentationDetents([.medium])
+            }
         }
     }
 
@@ -59,12 +55,21 @@ struct SettingsView: View {
 
     private var accountSection: some View {
         Section {
-            Text("Sign out")
-                .rowFormatting()
-                .anyButton(.highlight) {
-                    onSignOutPressed()
-                }
-                .removeListRowFormatting()
+            if isAnonymousUser {
+                Text("Save and back-up account")
+                    .rowFormatting()
+                    .anyButton(.highlight) {
+                        onAccountCreatePressed()
+                    }
+                    .removeListRowFormatting()
+            } else {
+                Text("Sign out")
+                    .rowFormatting()
+                    .anyButton(.highlight) {
+                        onSignOutPressed()
+                    }
+                    .removeListRowFormatting()
+            }
 
             Text("Delete account")
                 .foregroundStyle(.red)
@@ -84,7 +89,7 @@ struct SettingsView: View {
             HStack(spacing: 8) {
                 Text("Version")
                 Spacer(minLength: 0)
-                Text("1.0")
+                Text(Utilities.appVersion ?? "")
                     .foregroundStyle(.secondary)
             }
             .rowFormatting()
@@ -93,7 +98,7 @@ struct SettingsView: View {
             HStack(spacing: 8) {
                 Text("Build Number")
                 Spacer(minLength: 0)
-                Text("3")
+                Text(Utilities.buildNumber ?? "")
                     .foregroundStyle(.secondary)
             }
             .rowFormatting()
@@ -124,6 +129,21 @@ struct SettingsView: View {
             appState.updateViewState(showTapBarView: false)
         }
 
+    }
+
+    func onAccountCreatePressed() {
+        showCreateAccountView = true
+    }
+}
+
+fileprivate extension View {
+
+    func rowFormatting() -> some View {
+        self
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 16)
+            .padding(.horizontal, 16)
+            .background(Color(uiColor: .systemBackground))
     }
 }
 
