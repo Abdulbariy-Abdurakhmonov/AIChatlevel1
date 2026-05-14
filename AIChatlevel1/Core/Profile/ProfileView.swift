@@ -42,7 +42,7 @@ struct ProfileView: View {
     private func loadData() async {
         try? await Task.sleep(for: .seconds(3))
         isLoading = false
-        myAvatars = AvatarModel.mocks
+        myAvatars = []
     }
 
     private var myInfoSection: some View {

@@ -7,22 +7,111 @@
 
 import SwiftUI
 
+fileprivate extension View {
+
+    func rowFormatting() -> some View {
+        self
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 16)
+            .padding(.horizontal, 16)
+            .background(Color(uiColor: .systemBackground))
+    }
+}
+
 struct SettingsView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(AppState.self) private var appState
+    @State private var isPremium: Bool = false
 
     var body: some View {
         NavigationStack {
             List {
-                Button {
-                    onSignOutPressed()
-                } label: {
-                    Text("Sing out")
-                }
-
+                accountSection
+                purchaseSection
+                applicationSection
             }
             .navigationTitle("Settings")
+        }
+    }
+
+    private var purchaseSection: some View {
+        Section {
+            HStack(spacing: 8) {
+                Text("Account status: \(isPremium ? "PREMIUM" : "FREE")")
+                Spacer(minLength: 0)
+                if isPremium {
+                    Text("MANAGE")
+                        .badgeButton()
+                }
+            }
+            .rowFormatting()
+            .anyButton(.highlight, action: {
+
+            })
+            .removeListRowFormatting()
+            .disabled(!isPremium)
+
+        } header: {
+            Text("Purchases")
+        }
+    }
+
+    private var accountSection: some View {
+        Section {
+            Text("Sign out")
+                .rowFormatting()
+                .anyButton(.highlight) {
+                    onSignOutPressed()
+                }
+                .removeListRowFormatting()
+
+            Text("Delete account")
+                .foregroundStyle(.red)
+                .rowFormatting()
+                .anyButton(.highlight) {
+
+                }
+                .removeListRowFormatting()
+
+        } header: {
+            Text("Account")
+        }
+    }
+
+    private var applicationSection: some View {
+        Section {
+            HStack(spacing: 8) {
+                Text("Version")
+                Spacer(minLength: 0)
+                Text("1.0")
+                    .foregroundStyle(.secondary)
+            }
+            .rowFormatting()
+            .removeListRowFormatting()
+
+            HStack(spacing: 8) {
+                Text("Build Number")
+                Spacer(minLength: 0)
+                Text("3")
+                    .foregroundStyle(.secondary)
+            }
+            .rowFormatting()
+            .removeListRowFormatting()
+
+            Text("Contact us")
+                .foregroundStyle(.blue)
+                .rowFormatting()
+                .anyButton(.highlight, action: {
+
+                })
+                .removeListRowFormatting()
+
+        } header: {
+            Text("Aplication")
+        } footer: {
+            Text("Created by Abdulboriy iOS Developer.\nLearn more at https://abdulboriy.com")
+                .baselineOffset(6)
         }
     }
 
