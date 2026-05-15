@@ -12,7 +12,7 @@ struct AvatarModel: Hashable {
     let name: String?
     let characterOption: CharacterOption?
     let characterAction: CharacterAction?
-    let characterLocation: CharacterLoaction?
+    let characterLocation: CharacterLocation?
     let profileImageName: String?
     let authorId: String?
     let dateCreated: Date?
@@ -22,7 +22,7 @@ struct AvatarModel: Hashable {
         name: String? = nil,
         characterOption: CharacterOption? = nil,
         characterAction: CharacterAction? = nil,
-        characterLocation: CharacterLoaction? = nil,
+        characterLocation: CharacterLocation? = nil,
         profileImageName: String? = nil,
         authorId: String? = nil,
         dateCreated: Date? = nil
@@ -56,49 +56,3 @@ struct AvatarModel: Hashable {
 
 }
 
-struct AvatarDescriptionBuilder {
-    let characterOption: CharacterOption
-    let characterAction: CharacterAction
-    let characterLocation: CharacterLoaction
-
-    init(characterOption: CharacterOption, characterAction: CharacterAction, characterLocation: CharacterLoaction) {
-        self.characterOption = characterOption
-        self.characterAction = characterAction
-        self.characterLocation = characterLocation
-    }
-
-    init(avatar: AvatarModel) {
-        self.characterOption = avatar.characterOption ?? .default
-        self.characterAction = avatar.characterAction ?? .default
-        self.characterLocation = avatar.characterLocation ?? .default
-    }
-
-    var characterDescription: String {
-        "A \(characterOption.rawValue) that is \(characterAction.rawValue) on a \(characterLocation.rawValue)"
-    }
-
-}
-
-enum CharacterOption: String, CaseIterable, Hashable {
-    case man, woman, dog, car, alien
-
-    static var `default`: Self {
-        .man
-    }
-}
-
-enum CharacterAction: String {
-    case eating, crying, laughing, sleeping, playing, working, walking, shopping, dancing, relaxing, drinking
-
-    static var `default`: Self {
-        .eating
-    }
-}
-
-enum CharacterLoaction: String {
-    case park, office, home, beach, forest, city, mountain, mall, museum, library, hospital, school, church, subway, train, airport, space, moon, star, galaxy, ocean, desert, jungle, circus, zoo
-
-    static var `default`: Self {
-        .forest
-    }
-}
