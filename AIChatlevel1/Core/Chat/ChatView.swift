@@ -14,6 +14,8 @@ struct ChatView: View {
     @State private var currentUser: UserModel? = .mock
     @State private var textFieldText: String = ""
     @State private var showChatSettings: Bool = false
+    @State private var showAlert: Bool = false
+    @State private var alertTitle: String = ""
     @State private var scrollPosition: String?
 
     var body: some View {
@@ -34,15 +36,22 @@ struct ChatView: View {
             }
         }
         .confirmationDialog("", isPresented: $showChatSettings) {
-                Button("Report User / Chat", role: .destructive) {
+            Button("Report User / Chat", role: .destructive) {
 
-                }
-                Button("Delete Chat", role: .destructive) {
-
-                }
-            } message: {
-                Text("What Would You Like To Do?")
             }
+            Button("Delete Chat", role: .destructive) {
+
+            }
+        } message: {
+            Text("What Would You Like To Do?")
+        }
+        .alert(alertTitle, isPresented: $showAlert) {
+            Button("OK") {
+
+            }
+        } message: {
+            Text("")
+        }
 
     }
 
@@ -82,17 +91,25 @@ struct ChatView: View {
         guard let currentUser else { return }
 
         let content = textFieldText
-        let message = ChatMessageModel(
-            id: UUID().uuidString,
-            chatId: UUID().uuidString,
-            authodId: currentUser.userId,
-            content: content,
-            seenByIds: nil,
-            dateCreated: .now
-        )
-        chatMessages.append(message)
-        scrollPosition = message.id
-        textFieldText = ""
+
+        do {
+            try TextValidationHelper.checkIfTextIsValid(text: content)
+            let message = ChatMessageModel(
+                id: UUID().uuidString,
+                chatId: UUID().uuidString,
+                authodId: currentUser.userId,
+                content: content,
+                seenByIds: nil,
+                dateCreated: .now
+            )
+            chatMessages.append(message)
+            scrollPosition = message.id
+            textFieldText = ""
+        } catch let error {
+            alertTitle = error.localizedDescription
+            showAlert = true
+        }
+
     }
 
     private func onChatSettingPressed() {
