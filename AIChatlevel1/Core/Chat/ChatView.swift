@@ -15,14 +15,45 @@ struct ChatView: View {
     @State private var textFieldText: String = ""
     @State private var showChatSettings: Bool = false
     @State private var showAlert: Bool = false
+    @State private var showProfileView: Bool = false
     @State private var alertTitle: String = ""
     @State private var scrollPosition: String?
 
     var body: some View {
-        VStack(spacing: 0) {
+        ZStack {
+            VStack(spacing: 0) {
 
-            scrollViewSection
-            textFieldSection
+                scrollViewSection
+                textFieldSection
+            }
+
+            ZStack {
+                if showProfileView {
+                    Color.black.opacity(0.6)
+                        .ignoresSafeArea()
+                        .transition(AnyTransition(.opacity.animation(.smooth)))
+                        .onTapGesture {
+                            showProfileView = false
+                        }
+
+                    if let avatar {
+                        ProfileModalView(
+                            imageName: avatar.profileImageName,
+                            title: avatar.name,
+                            subtitle: avatar.characterOption?.rawValue.capitalized,
+                            onXmarkPressed: {
+                                showProfileView = false
+                            }
+                        )
+                        .padding(40)
+                        .transition(.slide)
+                    }
+
+                }
+            }
+            .zIndex(9999)
+            .animation(.easeInOut, value: showProfileView)
+
         }
         .navigationTitle(avatar?.name ?? "Chat")
         .toolbarTitleDisplayMode(.inline)
@@ -124,7 +155,8 @@ struct ChatView: View {
                     ChatBubbleViewBuilder(
                         message: message,
                         isCurrentUser: isCurrentuser,
-                        imageName: isCurrentuser ? nil : avatar?.profileImageName
+                        imageName: isCurrentuser ? nil : avatar?.profileImageName,
+                        onImagePressed: onAvatarImagePressed
                     )
                     .id(message.id)
                 }
@@ -137,6 +169,10 @@ struct ChatView: View {
         .scrollPosition(id: $scrollPosition, anchor: .center)
         .animation(.default, value: chatMessages.count)
         .animation(.default, value: scrollPosition)
+    }
+
+    private func onAvatarImagePressed() {
+        showProfileView = true
     }
 
 }

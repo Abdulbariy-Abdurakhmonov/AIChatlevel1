@@ -13,6 +13,7 @@ struct ProfileModalView: View {
     var title: String? = "Alpha"
     var subtitle: String? = "Alien"
     var onXmarkPressed: () -> Void = { }
+    
     var body: some View {
         VStack(spacing: 0) {
             if let imageName {
