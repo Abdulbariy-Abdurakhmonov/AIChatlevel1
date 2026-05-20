@@ -52,6 +52,9 @@ struct ProfileModalView: View {
     }
 }
 
+
+
+
 #Preview {
     ZStack {
         Color.gray
