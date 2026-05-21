@@ -17,8 +17,11 @@ struct ProfileModalView: View {
     var body: some View {
         VStack(spacing: 0) {
             if let imageName {
-                ImageLoaderView(urlString: imageName)
-                    .aspectRatio(1, contentMode: .fit)
+                ImageLoaderView(
+                    urlString: imageName,
+                    forceTransitionAnimation: true
+                )
+                .aspectRatio(1, contentMode: .fit)
             }
             VStack(alignment: .leading, spacing: 4) {
                 if let title {
@@ -51,8 +54,6 @@ struct ProfileModalView: View {
         )
     }
 }
-
-
 
 
 #Preview {
