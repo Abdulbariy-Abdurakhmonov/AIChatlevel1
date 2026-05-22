@@ -49,7 +49,7 @@ struct AvatarModel: Hashable {
         [
             AvatarModel(avatarId: UUID().uuidString, name: "Alfa", characterOption: .alien, characterAction: .crying, characterLocation: .galaxy, profileImageName: Constants.randomImage, authorId: UUID().uuidString, dateCreated: .now),
             AvatarModel(avatarId: UUID().uuidString, name: "Beta", characterOption: .dog, characterAction: .playing, characterLocation: .park, profileImageName: Constants.randomImage, authorId: UUID().uuidString, dateCreated: .now),
-            AvatarModel(avatarId: UUID().uuidString, name: "Gamma", characterOption: .car, characterAction: .working, characterLocation: .airport, profileImageName: Constants.randomImage, authorId: UUID().uuidString, dateCreated: .now),
+            AvatarModel(avatarId: UUID().uuidString, name: "Gamma", characterOption: .cat, characterAction: .working, characterLocation: .airport, profileImageName: Constants.randomImage, authorId: UUID().uuidString, dateCreated: .now),
             AvatarModel(avatarId: UUID().uuidString, name: "Delta", characterOption: .woman, characterAction: .laughing, characterLocation: .mall, profileImageName: Constants.randomImage, authorId: UUID().uuidString, dateCreated: .now)
         ]
     }

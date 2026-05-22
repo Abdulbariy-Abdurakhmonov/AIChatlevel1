@@ -5,7 +5,23 @@
 //  Created by Abdulboriy on 15/05/26.
 //
 enum CharacterOption: String, CaseIterable, Hashable {
-    case man, woman, dog, car, alien
+    case man, woman, dog, cat, alien
+
+    var plural: String {
+        switch self {
+        case .man:
+            return "men"
+        case .woman:
+            return "women"
+        case .dog:
+            return "dogs"
+        case .cat:
+            return "cats"
+        case .alien:
+            return "aliens"
+
+        }
+    }
 
     static var `default`: Self {
         .man

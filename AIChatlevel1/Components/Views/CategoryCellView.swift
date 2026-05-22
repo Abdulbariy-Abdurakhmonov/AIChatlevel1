@@ -36,8 +36,8 @@ struct CategoryCellView: View {
     VStack {
         CategoryCellView()
             .frame(width: 150)
-        CategoryCellView()
-            .frame(width: 300)
+        CategoryCellView(cornerRadius: 0)
+            .frame(maxWidth: .infinity)
         CategoryCellView()
             .frame(width: 100)
     }
