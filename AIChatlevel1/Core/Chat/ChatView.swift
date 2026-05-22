@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Binding where Value == Bool {
-    
+
 }
 
 struct ChatView: View {
@@ -22,6 +22,8 @@ struct ChatView: View {
     @State private var showProfileView: Bool = false
     @State private var alertTitle: String = ""
     @State private var scrollPosition: String?
+
+    var avatarId: String = AvatarModel.mock.avatarId
 
     var body: some View {
         VStack(spacing: 0) {
