@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+extension Binding where Value == Bool {
+    
+}
+
 struct ChatView: View {
 
     @State private var chatMessages: [ChatMessageModel] = ChatMessageModel.mocks
@@ -20,41 +24,16 @@ struct ChatView: View {
     @State private var scrollPosition: String?
 
     var body: some View {
-        ZStack {
-            VStack(spacing: 0) {
+        VStack(spacing: 0) {
 
-                scrollViewSection
-                textFieldSection
-            }
-
-            ZStack {
-                if showProfileView {
-                    Color.black.opacity(0.6)
-                        .ignoresSafeArea()
-                        .transition(AnyTransition(.opacity.animation(.smooth)))
-                        .onTapGesture {
-                            showProfileView = false
-                        }
-
-                    if let avatar {
-                        ProfileModalView(
-                            imageName: avatar.profileImageName,
-                            title: avatar.name,
-                            subtitle: avatar.characterOption?.rawValue.capitalized,
-                            onXmarkPressed: {
-                                showProfileView = false
-                            }
-                        )
-                        .padding(40)
-                        .transition(.slide)
-                    }
-
-                }
-            }
-            .zIndex(9999)
-            .animation(.easeInOut, value: showProfileView)
-
+            scrollViewSection
+            textFieldSection
         }
+        .showModal(showModal: $showProfileView, content: {
+            if let avatar {
+                profileModal(avatar: avatar)
+            }
+        })
         .navigationTitle(avatar?.name ?? "Chat")
         .toolbarTitleDisplayMode(.inline)
         .toolbar {
@@ -84,6 +63,19 @@ struct ChatView: View {
             Text("")
         }
 
+    }
+
+    private func profileModal(avatar: AvatarModel) -> some View {
+        ProfileModalView(
+            imageName: avatar.profileImageName,
+            title: avatar.name,
+            subtitle: avatar.characterOption?.rawValue.capitalized,
+            onXmarkPressed: {
+                showProfileView = false
+            }
+        )
+        .padding(40)
+        .transition(.slide)
     }
 
     private var textFieldSection: some View {
