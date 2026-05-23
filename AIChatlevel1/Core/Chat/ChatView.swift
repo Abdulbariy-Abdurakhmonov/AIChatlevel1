@@ -24,7 +24,7 @@ struct ChatView: View {
     @State private var scrollPosition: String?
 
     var avatarId: String = AvatarModel.mock.avatarId
-
+    
     var body: some View {
         VStack(spacing: 0) {
 

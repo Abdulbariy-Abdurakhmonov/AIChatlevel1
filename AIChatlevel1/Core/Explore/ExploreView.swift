@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-enum NavigationPathOptions: Hashable {
-    case chat(avatarId: String)
-    case category(category: CharacterOption, imageName: String)
-}
-
 struct ExploreView: View {
 
     let avatar = AvatarModel.mock
@@ -30,14 +25,7 @@ struct ExploreView: View {
 
             }
             .navigationTitle("Explore")
-            .navigationDestination(for: NavigationPathOptions.self) { newValue in
-                switch newValue {
-                case .chat(avatarId: let avatarId):
-                    ChatView(avatarId: avatarId)
-                case.category(category: let category, let imageName):
-                    CategoryListView(category: category, imageName: imageName)
-                }
-            }
+            .navigationDestinationForCoreModule(path: $path)
         }
     }
 
@@ -98,14 +86,14 @@ struct ExploreView: View {
 
     private var popularSection: some View {
         Section {
-            ForEach(popularAvatars, id: \.self) { item in
+            ForEach(popularAvatars, id: \.self) { avatar in
                 CustomCellView(
-                    imageName: item.profileImageName,
-                    title: item.name,
-                    subtitle: item.characterDescription
+                    imageName: avatar.profileImageName,
+                    title: avatar.name,
+                    subtitle: avatar.characterDescription
                 )
                 .anyButton(.highlight, action: {
-
+                    onAvatarPressed(avatar: avatar)
                 })
                 .removeListRowFormatting()
             }
