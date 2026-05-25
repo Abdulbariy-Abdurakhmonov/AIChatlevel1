@@ -11,6 +11,7 @@ import SwiftfulUtilities
 struct SettingsView: View {
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.authService) private var authService
     @Environment(AppState.self) private var appState
     @State private var isPremium: Bool = false
     @State private var isAnonymousUser: Bool = false
@@ -24,9 +25,14 @@ struct SettingsView: View {
                 applicationSection
             }
             .navigationTitle("Settings")
-            .sheet(isPresented: $showCreateAccountView) {
+            .sheet(isPresented: $showCreateAccountView, onDismiss: {
+                setAnonymousAccountStatus()
+            }, content: {
                 CreateAccountView()
                     .presentationDetents([.medium])
+            })
+            .onAppear {
+                setAnonymousAccountStatus()
             }
         }
     }
@@ -75,7 +81,7 @@ struct SettingsView: View {
                 .foregroundStyle(.red)
                 .rowFormatting()
                 .anyButton(.highlight) {
-
+                    onDeleteAccountPressed()
                 }
                 .removeListRowFormatting()
 
@@ -120,14 +126,31 @@ struct SettingsView: View {
         }
     }
 
-    func onSignOutPressed() {
-        // do some logic to sign out the user
-        dismiss()
+    func setAnonymousAccountStatus() {
+        isAnonymousUser = authService.getAuthenticatedUser()?.isAnonymous == true
+    }
 
+    func onSignOutPressed() {
         Task {
-            try? await Task.sleep(for: .seconds(1))
-            appState.updateViewState(showTapBarView: false)
+            do {
+                try authService.signOut()
+               await dismissScreen()
+            } catch {
+                
+            }
         }
+
+
+
+    }
+
+    func dismissScreen() async {
+        dismiss()
+        try? await Task.sleep(for: .seconds(1))
+        appState.updateViewState(showTapBarView: false)
+    }
+
+    func onDeleteAccountPressed() {
 
     }
 
