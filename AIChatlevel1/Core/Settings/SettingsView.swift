@@ -136,12 +136,9 @@ struct SettingsView: View {
                 try authService.signOut()
                await dismissScreen()
             } catch {
-                
+                print("Error...")
             }
         }
-
-
-
     }
 
     func dismissScreen() async {

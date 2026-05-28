@@ -7,20 +7,17 @@
 
 import SwiftUI
 
-extension Binding where Value == Bool {
-
-}
-
 struct ChatView: View {
 
     @State private var chatMessages: [ChatMessageModel] = ChatMessageModel.mocks
     @State private var avatar: AvatarModel? = .mock
     @State private var currentUser: UserModel? = .mock
     @State private var textFieldText: String = ""
-    @State private var showChatSettings: Bool = false
-    @State private var showAlert: Bool = false
     @State private var showProfileView: Bool = false
-    @State private var alertTitle: String = ""
+
+    @State private var showAlert: AnyAppAlert?
+    @State private var showChatSettings: AnyAppAlert?
+
     @State private var scrollPosition: String?
 
     var avatarId: String = AvatarModel.mock.avatarId
@@ -47,23 +44,8 @@ struct ChatView: View {
                     }
             }
         }
-        .confirmationDialog("", isPresented: $showChatSettings) {
-            Button("Report User / Chat", role: .destructive) {
-
-            }
-            Button("Delete Chat", role: .destructive) {
-
-            }
-        } message: {
-            Text("What Would You Like To Do?")
-        }
-        .alert(alertTitle, isPresented: $showAlert) {
-            Button("OK") {
-
-            }
-        } message: {
-            Text("")
-        }
+        .showCustomAlert(type: .confirmationDialog, alert: $showChatSettings)
+        .showCustomAlert(alert: $showAlert)
 
     }
 
@@ -130,15 +112,30 @@ struct ChatView: View {
             chatMessages.append(message)
             scrollPosition = message.id
             textFieldText = ""
-        } catch let error {
-            alertTitle = error.localizedDescription
-            showAlert = true
+        } catch {
+            showAlert = AnyAppAlert(error: error)
         }
 
     }
 
     private func onChatSettingPressed() {
-        showChatSettings = true
+        showChatSettings = AnyAppAlert(
+            title: "",
+            subtitle: "What would you like to do?",
+            buttons: {
+                AnyView(
+                    Group {
+                        Button("Report Chat / User", role: .destructive) {
+
+                        }
+                        Button("Delete Chat", role: .destructive) {
+
+                        }
+
+                    }
+                )
+            }
+        )
     }
 
     private var scrollViewSection: some View {

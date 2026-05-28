@@ -36,5 +36,3 @@ struct TextValidationHelper {
         }
     }
 }
-
-
