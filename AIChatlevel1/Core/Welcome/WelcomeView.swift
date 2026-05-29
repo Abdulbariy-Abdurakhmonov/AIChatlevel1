@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WelcomeView: View {
 
+    @Environment(AppState.self) private var root
     @State var imageName: String = Constants.randomImage
     @State private var showSignInView: Bool = false
 
@@ -32,7 +33,10 @@ struct WelcomeView: View {
         .sheet(isPresented: $showSignInView) {
             CreateAccountView(
                 title: "Sing in",
-                subtitle: "Connect to an existing account"
+                subtitle: "Connect to an existing account",
+                onDidSignIn: { isNewUser in
+                    handleDidSignIn(isNewUser: isNewUser)
+                }
             )
                 .presentationDetents([.medium])
         }
@@ -68,6 +72,14 @@ struct WelcomeView: View {
                 .onTapGesture {
                     onSignInPressed()
                 }
+        }
+    }
+
+    private func handleDidSignIn(isNewUser: Bool) {
+        if isNewUser {
+            // Do nothing
+        } else {
+            root.updateViewState(showTapBarView: true)
         }
     }
 

@@ -16,6 +16,7 @@ struct SettingsView: View {
     @State private var isPremium: Bool = false
     @State private var isAnonymousUser: Bool = false
     @State private var showCreateAccountView: Bool = false
+    @State private var showAlert: AnyAppAlert?
 
     var body: some View {
         NavigationStack {
@@ -34,6 +35,7 @@ struct SettingsView: View {
             .onAppear {
                 setAnonymousAccountStatus()
             }
+            .showCustomAlert(alert: $showAlert)
         }
     }
 
@@ -136,7 +138,7 @@ struct SettingsView: View {
                 try authService.signOut()
                await dismissScreen()
             } catch {
-                print("Error...")
+                showAlert = AnyAppAlert(error: error)
             }
         }
     }
@@ -148,7 +150,27 @@ struct SettingsView: View {
     }
 
     func onDeleteAccountPressed() {
+        showAlert = AnyAppAlert(
+            title: "Delete Account?",
+            subtitle: "This action is permanent and cannot be undone. Are you sure you want to delete your account?",
+            buttons: {
+                AnyView(
+                    Button("Delete", role: .destructive, action: {
+                        onDeleteAccountConfirmed()
+                    })
+                )
+            }
+        )
+    }
 
+    private func onDeleteAccountConfirmed() {
+        Task {
+            do {
+                try await authService.deleteAccount()
+            } catch {
+                showAlert = AnyAppAlert(error: error)
+            }
+        }
     }
 
     func onAccountCreatePressed() {
