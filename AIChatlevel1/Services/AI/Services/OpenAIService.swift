@@ -5,7 +5,7 @@
 //  Created by Abdulboriy on 06/06/26.
 //
 
-
+import SwiftUI
 import OpenAI
 struct OpenAIService: AIService {
 

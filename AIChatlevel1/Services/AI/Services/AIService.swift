@@ -5,7 +5,7 @@
 //  Created by Abdulboriy on 06/06/26.
 //
 
-
+import SwiftUI
 protocol AIService: Sendable {
     func generateImage(input: String) async throws -> UIImage
 }
