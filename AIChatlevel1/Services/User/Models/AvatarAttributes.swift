@@ -26,6 +26,15 @@ enum CharacterOption: String, CaseIterable, Hashable {
     static var `default`: Self {
         .man
     }
+
+    var article: String {
+        switch self {
+        case .alien:
+            return "an"
+        default:
+            return "a"
+        }
+    }
 }
 
 enum CharacterAction: String, CaseIterable, Hashable {
@@ -62,7 +71,8 @@ struct AvatarDescriptionBuilder {
     }
 
     var characterDescription: String {
-        "A \(characterOption.rawValue) that is \(characterAction.rawValue) on a \(characterLocation.rawValue)"
+        "\(characterOption.rawValue.withArticle) that is \(characterAction.rawValue) in \(characterLocation.rawValue.withArticle)"
     }
 
 }
+
